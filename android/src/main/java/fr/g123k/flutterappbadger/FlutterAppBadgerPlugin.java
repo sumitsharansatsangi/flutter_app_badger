@@ -1,13 +1,10 @@
 package fr.g123k.flutterappbadger;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import io.flutter.embedding.android.FlutterActivity;
-import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
+import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import me.leolin.shortcutbadger.ShortcutBadger;
-import io.flutter.plugins.GeneratedPluginRegistrant;
 
 import android.annotation.TargetApi;
 import android.app.IntentService;
@@ -21,7 +18,7 @@ import android.util.Log;
 /**
  * FlutterAppBadgerPlugin
  */
-public class FlutterAppBadgerPlugin implements MethodCallHandler, FlutterPlugin {
+public class FlutterAppBadgerPlugin implements  FlutterPlugin {
 
   private Context applicationContext;
   private MethodChannel channel;
@@ -38,7 +35,6 @@ public class FlutterAppBadgerPlugin implements MethodCallHandler, FlutterPlugin 
   @Override
   public void onAttachedToEngine(FlutterPluginBinding flutterPluginBinding) {
     channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), CHANNEL_NAME);
-    channel.setMethodCallHandler(this);
     applicationContext = flutterPluginBinding.getApplicationContext();
     mNotificationManager = (NotificationManager) applicationContext.getSystemService(applicationContext.NOTIFICATION_SERVICE);
   }
@@ -49,8 +45,8 @@ public class FlutterAppBadgerPlugin implements MethodCallHandler, FlutterPlugin 
     applicationContext = null;
   }
 
-  @Override
-  public void onMethodCall(MethodCall call, Result result) {
+
+  public void onMethodCall(MethodCall call, MethodChannel.Result result) {
     if (call.method.equals("updateBadgeCount")) {
       if (Build.MANUFACTURER.equalsIgnoreCase("Xiaomi")) {
         Notification.Builder  builder = new Notification.Builder(applicationContext)
